@@ -2,8 +2,8 @@
 #include<Adafruit_INA219.h>
 #include<LiquidCrystal_I2C.h>
 
-LiquidCrystal_I2C lcd(0x20,16,2);
-Adafruit_INA219 ina(0x40);
+LiquidCrystal_I2C lcd(0x20,16,2);       //Replace the address with correct one, this is just an example
+Adafruit_INA219 ina(0x40);              //Replace the address with correct one, this is just an example
 
 byte one_box[] = {
   B11111,
