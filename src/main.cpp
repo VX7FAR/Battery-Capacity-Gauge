@@ -17,11 +17,18 @@ byte one_box[] = {
 };
 
 int ocvtable[][2] = {
-    {4.2, 100},
-    {3.9, 75},
-    {3.7, 50},
-    {3.5, 25},
-    {3.0, 0}
+    {4.13, 100},
+    {4.03, 90},
+    {3.92, 80},
+    {3.83, 70},
+    {3.75, 60},
+    {3.70, 50},
+    {3.66, 40},
+    {3.63, 30},
+    {3.59, 20},
+    {3.53, 10},
+    {3.43, 5},
+    {3.34, 0}
 };
 
 //Battery info
@@ -61,14 +68,22 @@ void bar_printer(int num,int x,int y){
     }
 }
 
-int table_finder(float value){
-    for(int i = 0;i<5;i++){
-        if((value,1) == ocvtable[i][1]){
-            return i;
+//Estimates the capacity by combination of OCV and coulumb counting method
+void idle_calculator(){
+    float j = 0;
+    for(int i=0;i<12;i++){
+        if(abs(battery_voltage - ocvtable[i][0]) <= 0.01){
+            j = ocvtable[i][1];
+            break;
+        }
+        else{
+            j = battery_voltage;
         }
     }
+    capacityleft = battery_voltage * 0.9 + j *0.1;
 }
 
+//Reads data from INA219
 void battery_processor(unsigned long delta){
     battery_voltage = ina.getBusVoltage_V();
     battery_ampere = ina.getCurrent_mA();
@@ -76,6 +91,7 @@ void battery_processor(unsigned long delta){
     capacityleft = 100.0 - (usedcapacity/capacity) * 100.0;
 }
 
+//Calculates average ampere based on last 4 readings
 float amp_average(float A){
     avg_amp[0] = avg_amp[1];
     avg_amp[1] = avg_amp[2];
@@ -84,6 +100,7 @@ float amp_average(float A){
     return (avg_amp[0] + avg_amp[1] + avg_amp[2] + avg_amp[3])/4;
 }
 
+//Main Code
 void loop(){
     previous_ms = ms;
     ms = millis();
@@ -105,7 +122,14 @@ void loop(){
     }
 
     if(battery_State == 'N' && time_since_lastvoltage >= 5000){
-        
+        idle_calculator();
+    }
+
+    if(capacityleft<=0.0){
+        capacityleft = 0.0;
+    }
+    if(capacityleft>=100.0){
+        capacityleft = 100.0;
     }
 
     if(ms-previous_ms >= 200){
