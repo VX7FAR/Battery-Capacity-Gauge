@@ -1,7 +1,8 @@
 # Battery-Capacity-Gauge
 
 After I just got into electronics many people suggested me to make my own BMS but electronic components and PCB are expensive here which is why I thought I should try to make something like that but with arduino.
-Sooo cant say it as a BMS but I made this Battery Capacity Gauge which is suited to work with single cell 18650 3.7v li-ion cells.
+Sooo cant say it as a BMS but I made this Battery Capacity Gauge which is suited to work with single battery 18650 3.7v li-ion battery and it works by calculating the SoC by coulomb method and OCV method.
+
 This is what your circuit should look like:
 <img width="1092" height="672" alt="Schematic" src="https://github.com/user-attachments/assets/6c1da674-03d3-4f21-b492-f71ad0dc008b" />
 
@@ -19,9 +20,10 @@ The case is simple with not too much effects so that if you want you can modify 
 On the back there will be a rectangular slot for the port of TP4056
 On the front the big gap is for the screen.
 The frame at the front is to be printed seperately so that inside it can provide support to the LCD screen.
+You can also see a frame like thing which can be used for any component that has to stay in air, it makes sure that the cmponents do not touch each other.
 
 Extras:
-- In the code the INA219 has been set to 32v 2A configuration however you can change it from the following commands give in the table. You just need to change it in line 56 and remove the permade configuration.
+- In the code the INA219 has been set to 32v 2A configuration however you can change it from the following commands give in the table. You just need to change it in line where it is ina.setCalibration_32V_2A() in setup() and remove the permade configuration.
 
 | Code | Volts | Ampere |
 |----------|----------|----------|
@@ -29,5 +31,7 @@ Extras:
 | setCalibration_32V_1A()   | 32V   | 1A   |
 | setCalibration_16V_400mA()   | 16V   | 400mA   |   
 
-- For displaying the bar I have used a complete black box, to change it you can make your own custom byte and update it into one_box[]. To make the byte you can visit this website and make the design as you like: https://maxpromer.github.io/LCD-Character-Creator/
-- If you wish to use another battery then update the <mark>capacity</mark> variable  to the mAh capacity of your battery and you might have to update the OCV table with the OCV table of your own battery. Also if the battery operates on very low current like less than 20mA then you might have to remove the ocmponents that determine battery status or make it very less to maybe 5 or 10 or whatever you like. Also you might have to change the TP4056 with something else since it cannot charge every cell.
+- For displaying the bar I have used a complete black box, to change it you can make your own custom character and update it into one_box[]. To make the byte you can visit this website and make the design as you like: https://maxpromer.github.io/LCD-Character-Creator/
+- If you wish to use another battery then update the <mark>capacity</mark> variable  to the mAh capacity of your battery and you might have to update the OCV table with the OCV table of your own battery. Also if the battery operates on very low current like less than 20mA then you might have to remove the components that determine battery status or make it very less to maybe 5 or 10 or whatever you like. Also you might have to change the TP4056 with something else since it cannot charge every battery.
+
+NOTE : This project still lacks some features and is in development so expect improvements.
